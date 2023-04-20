@@ -1,5 +1,6 @@
 package com.generation.lojagames.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,16 @@ public class ProdutoController {
 		return ResponseEntity.ok(produtoRepository.findByNomeContainingIgnoreCase(nome));
 	}
 
+	@GetMapping("/precomenor/{preco}")
+	public ResponseEntity<List<Produto>> getByPrecoLessThan(@PathVariable BigDecimal preco){
+		return ResponseEntity.ok(produtoRepository.findByPrecoLessThanOrderByPreco(preco));
+	}
+	
+	@GetMapping("/precomaior/{preco}")
+	public ResponseEntity<List<Produto>> getByPrecoGreaterThan(@PathVariable BigDecimal preco){
+		return ResponseEntity.ok(produtoRepository.findByPrecoGreaterThanOrderByPreco(preco));
+	}
+	
 	@PostMapping
 	public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
 		
@@ -63,7 +74,7 @@ public class ProdutoController {
 	public ResponseEntity<Produto> put(@Valid @RequestBody Produto produto) {
 		
 		if (categoriaRepository.existsById(produto.getId())) {
-		return produtoRepository.findById(produto.getId())
+		return produtoRepository.findById(produto.getCategoria().getId())
 				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto)))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 		}else 
