@@ -50,6 +50,10 @@ public class Produto {
 	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date dataLancamento;
 	
+	@ManyToOne
+	@JsonIgnoreProperties("produto")
+	private Usuario usuario;
+	
 	private String foto;
 	
 	private boolean curtir;
